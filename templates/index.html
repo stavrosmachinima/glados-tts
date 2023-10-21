@@ -29,28 +29,32 @@
         text-align: center;
       }
       
-      form {
+      .center {
         position: absolute;
         transform: translate(-50%, -50%);
-        top: 50%;
+        top: 30%;
         left: 50%;
+      }
+      
+      #form {
         display: flex;
+        top: 50%;
         flex-direction: column;
       }
       
-      .animate-text {
+      audio,
+      #form {
+        display: none;
+      }
+      
+      #animate-text {
         font-size: 64px;
         animation: fadeIn 2s forwards;
         text-align: center;
-        margin-top: 10%;
-      }
-      
-      #myAudio {
-        opacity: 0;
       }
       
       @media screen and (max-width: 768px) {
-        .animate-text {
+        #animate-text {
           font-size: 12vw;
           margin-top: 40%;
         }
@@ -118,31 +122,42 @@
     </style>
   </head>
   <body>
-    <audio id="myAudio" controls autoplay>
+    <input id="muteButton" type="image" src="/images/muteIcon.png" name="unmuteButton" onclick="beginShow()" style="width:100px" />
+    <audio id="myAudio" muted>
       <source src="{{ audio_src }}" type="audio/mpeg" />Your browser does not support the audio element.
     </audio>
-    <div class="animate-text">
-      <span id="welcomeText">Hey!</span>
+
+    <div id="animate-text" class="center">
+      <span id="welcomeText"></span>
     </div>
 
-    <form method="POST" action="/synthesize">
+    <form method="POST" action="/synthesize" class="center" id="form">
       <input type="text" placeholder="Geia sou Fani..." />
       <button type="submit" class="button-85" role="button">Talk to me!</button>
     </form>
     <script>
       const welcomeText = document.getElementById('welcomeText')
       const audio = document.getElementById('myAudio')
+      const mute = document.getElementById('muteButton')
+      const form = document.querySelector('#form')
       
-      setTimeout(() => {
+      function beginShow() {
+        audio.muted = false
         audio.play()
+        form.style.display = 'flex'
+        mute.style.display = 'none'
         welcomeText.style.opacity = 1
-        welcomeText.innerHTML += ' FANIS!'
-        welcomeText.style.display = 'inline'
-      }, 700)
+        welcomeText.innerHTML = 'Hey!'
       
-      setTimeout(() => {
-        welcomeText.innerHTML = 'I am ALIVE!!'
-      }, 1500)
+        setTimeout(() => {
+          welcomeText.innerHTML += ' FANIS!'
+          welcomeText.style.display = 'inline'
+        }, 700)
+      
+        setTimeout(() => {
+          welcomeText.innerHTML = 'I am ALIVE!!'
+        }, 1500)
+      }
     </script>
   </body>
 </html>
