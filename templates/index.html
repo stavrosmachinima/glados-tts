@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta charset="utf-8" />
+    <meta name="description" content="Glados tts" />
+    <style>
+      body,
+      html {
+        height: 100%;
+      }
+      
+      body {
+        overflow: hidden;
+        background-image: url('/images/glados_tts_background.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        font-family: Arial, sans-serif;
+        margin: 0;
+      }
+      
+      input[type='text'] {
+        width: 300px;
+        padding: 10px;
+        font-size: 16px;
+        text-align: center;
+      }
+      
+      form {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .animate-text {
+        font-size: 64px;
+        animation: fadeIn 2s forwards;
+        text-align: center;
+        margin-top: 10%;
+      }
+      
+      #hey,
+      #fanis,
+      #alive,
+      #myAudio {
+        opacity: 0;
+      }
+      
+      @media screen and (max-width: 768px) {
+        .animate-text {
+          font-size: 12vw;
+          margin-top: 40%;
+        }
+      }
+      
+      .button-85 {
+        width: 150px;
+        padding: 0.6em 2em;
+        margin-top: 60px;
+        border: none;
+        outline: none;
+        color: rgb(255, 255, 255);
+        background: #111;
+        cursor: pointer;
+        position: relative;
+        z-index: 0;
+        border-radius: 10px;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      
+      .button-85:before {
+        content: '';
+        background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        background-size: 400%;
+        z-index: -1;
+        filter: blur(5px);
+        -webkit-filter: blur(5px);
+        width: calc(100% + 4px);
+        height: calc(100% + 4px);
+        animation: glowing-button-85 20s linear infinite;
+        transition: opacity 0.3s ease-in-out;
+        border-radius: 10px;
+      }
+      
+      @keyframes glowing-button-85 {
+        0% {
+          background-position: 0 0;
+        }
+        50% {
+          background-position: 400% 0;
+        }
+        100% {
+          background-position: 0 0;
+        }
+      }
+      
+      .button-85:after {
+        z-index: -1;
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #222;
+        left: 0;
+        top: 0;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <audio id="myAudio" controls autoplay>
+      <source src="{{ audio_src }}" type="audio/mpeg" />Your browser does not support the audio element.
+    </audio>
+    <div class="animate-text">
+      <span id="welcomeText">Hey!</span>
+    </div>
+
+    <form method="POST" action="/synthesize">
+      <input type="text" placeholder="Geia sou Fani..." />
+      <button type="submit" class="button-85" role="button">Talk to me!</button>
+    </form>
+    <script>
+      const welcomeText = document.getElementById('welcomeText')
+      const audio = document.getElementById('myAudio')
+      
+      setTimeout(() => {
+        audio.play()
+        welcomeText.style.opacity = 1
+        welcomeText.innerHTML += ' FANIS!'
+        welcomeText.style.display = 'inline'
+      }, 700)
+      
+      setTimeout(() => {
+        welcomeText.innerHTML = 'I am ALIVE!!'
+      }, 1500)
+    </script>
+  </body>
+</html>

@@ -1,1 +1,6 @@
 *.pt filter=lfs diff=lfs merge=lfs -text
+models/glados-new.pt filter=lfs diff=lfs merge=lfs -text
+models/glados.pt filter=lfs diff=lfs merge=lfs -text
+models/vocoder-gpu.pt filter=lfs diff=lfs merge=lfs -text
+models/vocoder-cpu.pt filter=lfs diff=lfs merge=lfs -text
+models/en_us_cmudict_ipa_forward.pt filter=lfs diff=lfs merge=lfs -text
