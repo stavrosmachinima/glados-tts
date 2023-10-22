@@ -47,7 +47,7 @@ if __name__ == "__main__":
     @app.route('/')
     def home():
         file = "audio/GLaDOS-tts-Hey!-Fanis!-I-am-ALIVE!.wav"
-        return render_template('index.html', audio_src=file)
+        return render_template('index.html', audio_src=file, its_lit=False)
 
     @app.route('/synthesize', methods=['POST'])
     # @app.route('/synthesize/', defaults={'text': ''})
@@ -70,7 +70,7 @@ if __name__ == "__main__":
             # Update access time. This will allow for routine cleanups
             os.utime(filepath, None)
             print("\033[1;94mINFO:\033[;97m The audio sample sent from cache.")
-            return render_template('index.html', audio_src=directory)
+            return render_template('index.html', audio_src=directory, its_lit=True)
 
         # Generate New Sample
         key = str(time.time())[7:]
@@ -83,11 +83,11 @@ if __name__ == "__main__":
                 shutil.move(tempfile, filepath)
             else:
                 print("*****KAPPA3******")
-                return render_template('index.html', audio_src=directory)
+                return render_template('index.html', audio_src=directory, its_lit=True)
                 os.remove(tempfile)
 
             print("****KAPPA4****")
-            return render_template('index.html', audio_src=directory)
+            return render_template('index.html', audio_src=directory, its_lit=True)
 
         else:
             return 'TTS Engine Failed'

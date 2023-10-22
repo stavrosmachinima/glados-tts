@@ -121,9 +121,9 @@
       }
     </style>
   </head>
-  <body>
-    <input id="muteButton" type="image" src="/images/muteIcon.png" name="unmuteButton" onclick="beginShow()" style="width:100px" />
-    <audio id="myAudio" muted>
+  <body onload="prepareUi()">
+    <input id="muteButton" type="image" src="/images/muteIcon.png" onclick="beginShow()" name="unmuteButton" style="width:100px" />
+    <audio id="myAudio" autoplay muted>
       <source src="{{ audio_src }}" type="audio/mpeg" />Your browser does not support the audio element.
     </audio>
 
@@ -140,12 +140,29 @@
       const audio = document.getElementById('myAudio')
       const mute = document.getElementById('muteButton')
       const form = document.querySelector('#form')
+      var flag = false
+      
+      function prepareUi() {
+        if ('{{ its_lit }}' == 'True' || flag) {
+          audio.currentTime = 0
+          audio
+            .play()
+            .then(() => {
+              audio.muted = false
+              console.log('KAPPArerere!')
+            })
+            .catch(() => {
+              alert('Please allow audio to play on this website')
+            })
+          form.style.display = 'flex'
+          mute.style.display = 'none'
+        }
+      }
       
       function beginShow() {
-        audio.muted = false
-        audio.play()
-        form.style.display = 'flex'
-        mute.style.display = 'none'
+        flag = true
+        prepareUi()
+        flag = false
         welcomeText.style.opacity = 1
         welcomeText.innerHTML = 'Hey!'
       
