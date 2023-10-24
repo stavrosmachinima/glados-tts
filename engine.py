@@ -6,6 +6,7 @@ from utils.tools import prepare_text
 import torch
 import sys
 import os
+import requests
 sys.path.insert(0, os.getcwd()+'/glados_tts')
 
 
@@ -49,12 +50,16 @@ if __name__ == "__main__":
         file = "audio/GLaDOS-tts-Hey!-Fanis!-I-am-ALIVE!.wav"
         return render_template('index.html', audio_src=file, its_lit=False)
 
-    @app.route('/synthesize', methods=['POST'])
+    @app.route('/synthesize', methods=['POST', 'GET'])
     # @app.route('/synthesize/', defaults={'text': ''})
     # @app.route('/synthesize/<path:text>')
     def synthesize():
         # if(text == ''): return 'No input'
 
+        print(request.url)
+        print(request.data)
+        print(request.form.get('input_text'))
+        return render_template('index.html', audio_src="KAPPA", its_lit=True)
         text = "I solemnly swear that I am up to no good."
         # text = urllib.parse.unquote(request.url[request.url.find('synthesize/')+11:])
         filename = "GLaDOS-tts-"+text.replace(" ", "-")

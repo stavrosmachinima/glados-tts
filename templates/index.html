@@ -131,16 +131,18 @@
       <span id="welcomeText"></span>
     </div>
 
-    <form method="POST" action="/synthesize" class="center" id="form">
-      <input type="text" placeholder="Geia sou Fani..." />
-      <button type="submit" class="button-85" role="button">Talk to me!</button>
+    <form method="GET" class="center" id="form">
+      <input type="text" name="input_text" id="input_text" placeholder="Geia sou Fani..." />
+      <button type="submit" class="button-85" role="button" onmousedown="fillInput()">Talk to me!</button>
     </form>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
       const welcomeText = document.getElementById('welcomeText')
       const audio = document.getElementById('myAudio')
       const mute = document.getElementById('muteButton')
       const form = document.querySelector('#form')
       var flag = false
+      var text = document.getElementById('input_text').value
       
       function prepareUi() {
         if ('{{ its_lit }}' == 'True' || flag) {
@@ -149,7 +151,6 @@
             .play()
             .then(() => {
               audio.muted = false
-              console.log('KAPPArerere!')
             })
             .catch(() => {
               alert('Please allow audio to play on this website')
@@ -175,6 +176,24 @@
           welcomeText.innerHTML = 'I am ALIVE!!'
         }, 1500)
       }
+      
+      function fillInput() {
+        text = document.getElementById('input_text').value
+      }
+      
+      $.ajax({
+        url: '/synthesize',
+        type: 'get',
+        data: text,
+        contentType: 'text/plain',
+        success: function (response) {
+          //$('#place_for_suggestions').html(response)
+          console.log('NIANIA')
+        },
+        error: function (xhr) {
+          //Do Something to handle error
+        }
+      })
     </script>
   </body>
 </html>
