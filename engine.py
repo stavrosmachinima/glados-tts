@@ -56,11 +56,8 @@ if __name__ == "__main__":
     def synthesize():
         # if(text == ''): return 'No input'
 
-        print(request.url)
-        print(request.data)
         print(request.form.get('input_text'))
-        return render_template('index.html', audio_src="KAPPA", its_lit=True)
-        text = "I solemnly swear that I am up to no good."
+        text = "I solemnly swear that I am up to no good!"
         # text = urllib.parse.unquote(request.url[request.url.find('synthesize/')+11:])
         filename = "GLaDOS-tts-"+text.replace(" ", "-")
         # filename = filename.replace("!", "")
@@ -69,13 +66,16 @@ if __name__ == "__main__":
         directory = 'audio/'+filename
         filepath = './static/'+directory
 
+        print(directory)
+
         # Check for Local Cache
         if (os.path.isfile(filepath)):
             print("AKKPPA1")
             # Update access time. This will allow for routine cleanups
             os.utime(filepath, None)
             print("\033[1;94mINFO:\033[;97m The audio sample sent from cache.")
-            return render_template('index.html', audio_src=directory, its_lit=True)
+            # return render_template('index.html', audio_src=directory, its_lit=True)
+            return directory
 
         # Generate New Sample
         key = str(time.time())[7:]
@@ -88,11 +88,11 @@ if __name__ == "__main__":
                 shutil.move(tempfile, filepath)
             else:
                 print("*****KAPPA3******")
-                return render_template('index.html', audio_src=directory, its_lit=True)
                 os.remove(tempfile)
+                return directory
 
             print("****KAPPA4****")
-            return render_template('index.html', audio_src=directory, its_lit=True)
+            return directory
 
         else:
             return 'TTS Engine Failed'

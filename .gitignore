@@ -2,3 +2,5 @@
 *.wav
 static/audio/*
 audio/*
+models/*
+*.pt
