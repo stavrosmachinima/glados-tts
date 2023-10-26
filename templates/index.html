@@ -54,6 +54,7 @@
         font-size: 64px;
         animation: fadeIn 2s forwards;
         text-align: center;
+        color: white;
       }
 
       @media screen and (max-width: 768px) {
@@ -136,7 +137,7 @@
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   </head>
-  <body onload="prepareUi()">
+  <body>
     <input
       id="muteButton"
       type="image"
@@ -146,7 +147,15 @@
       style="width: 100px"
     />
     <audio id="myAudio" autoplay muted>
-      <source id="mySource" src="{{ audio_src }}" type="audio/mpeg" />
+      <source
+        id="mySource"
+        src="audio/standard/GLaDOS-tts-Hey!-Fanis!-I-am-ALIVE!.wav"
+        type="audio/mpeg"
+      />
+      Your browser does not support the audio element.
+    </audio>
+    <audio id="backgroundAudio" controls loop autoplay muted>
+      <source src="audio/standard/yourPreciousMoon.wav" type="audio/mpeg" />
       Your browser does not support the audio element.
     </audio>
 
@@ -170,34 +179,41 @@
     </form>
     <script>
       const welcomeText = document.getElementById("welcomeText");
-      const audio = document.getElementById("myAudio");
+      const audioSynth = document.getElementById("myAudio");
+      const audioBack = document.getElementById("backgroundAudio");
       const source = document.getElementById("mySource");
       const mute = document.getElementById("muteButton");
       const form = document.querySelector("#form");
-      var flag = false;
 
-      function prepareUi() {
-        if ("{{ its_lit }}" == "True" || flag) {
-          audio.currentTime = 0;
-          audio
-            .play()
-            .then(() => {
-              audio.muted = false;
-            })
-            .catch(() => {
-              alert("Please allow audio to play on this website");
-            });
-          form.style.display = "flex";
-          mute.style.display = "none";
-        }
+      function playAudio() {
+        audioSynth.currentTime = 0;
+        audioSynth
+          .play()
+          .then(() => {
+            audioSynth.muted = false;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        audioBack.currentTime = 0;
+        audioBack
+          .play()
+          .then(() => {
+            audioBack.style.display = "block";
+            audioBack.volume = 0.2;
+            audioBack.muted = false;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
 
       function beginShow() {
-        flag = true;
-        prepareUi();
-        flag = false;
+        document.body.style.backgroundImage = "url('/images/glados3.jpeg')";
+        playAudio();
+        form.style.display = "flex";
+        mute.style.display = "none";
         welcomeText.style.opacity = 1;
-
         setTimeout(() => {
           welcomeText.innerHTML = "Hey!";
         }, 300);
@@ -212,6 +228,8 @@
         }, 1500);
       }
 
+      function showAudio(text) {}
+
       function sendRequest() {
         var text = document.getElementById("input_text").value;
 
@@ -220,16 +238,17 @@
           type: "POST",
           data: { input_text: text },
           success: function (response) {
-            console.log("Request successful:", response);
-            console.log("Request successful:", response);
-            source.src = response;
-            audio.load();
-            audio.play();
             // Handle the response from the server here
+            console.log("Request successful:", response);
+            let json = JSON.parse(response);
+            source.src = json["audio"];
+            audioSynth.load();
+            audioSynth.play();
+            let text = json["transliteration"];
           },
           error: function (xhr) {
-            console.log("Request failed:", xhr);
             // Handle errors here
+            console.log("Request failed:", xhr);
           },
         });
       }

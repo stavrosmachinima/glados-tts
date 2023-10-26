@@ -3,10 +3,9 @@ import urllib.parse
 import time
 from scipy.io.wavfile import write
 from utils.tools import prepare_text
-import torch
 import sys
 import os
-import requests
+import json
 sys.path.insert(0, os.getcwd()+'/glados_tts')
 
 
@@ -38,7 +37,7 @@ if __name__ == "__main__":
     PORT = 8124
     CACHE = True
 
-    from flask import Flask, request, send_file, render_template
+    from flask import Flask, request, render_template
     import shutil
 
     print("\033[1;94mINFO:\033[;97m Initializing TTS Server...")
@@ -48,7 +47,7 @@ if __name__ == "__main__":
     @app.route('/')
     def home():
         file = "audio/GLaDOS-tts-Hey!-Fanis!-I-am-ALIVE!.wav"
-        return render_template('index.html', audio_src=file, its_lit=False)
+        return render_template('index.html')
 
     @app.route('/synthesize', methods=['POST', 'GET'])
     # @app.route('/synthesize/', defaults={'text': ''})
@@ -63,10 +62,9 @@ if __name__ == "__main__":
         # filename = filename.replace("!", "")
         filename = filename.replace("°c", "degrees celcius")
         filename = filename.replace(",", "")+".wav"
-        directory = 'audio/'+filename
+        directory = 'audio/synthesized/'+filename
         filepath = './static/'+directory
-
-        print(directory)
+        data={'audio':directory,'transliteration':text}
 
         # Check for Local Cache
         if (os.path.isfile(filepath)):
@@ -75,13 +73,13 @@ if __name__ == "__main__":
             os.utime(filepath, None)
             print("\033[1;94mINFO:\033[;97m The audio sample sent from cache.")
             # return render_template('index.html', audio_src=directory, its_lit=True)
-            return directory
+            return json.dumps(data)
 
         # Generate New Sample
         key = str(time.time())[7:]
         if (glados_tts(text, key)):
             print("*******AKKPPA2*******")
-            tempfile = './static/audio/GLaDOS-tts-temp-output-'+key+'.wav'
+            tempfile = './static/synthesized/dynamic/GLaDOS-tts-temp-output-'+key+'.wav'
 
             # If the text isn't too long, store in cache
             if (len(text) < 200 and CACHE):
@@ -89,17 +87,11 @@ if __name__ == "__main__":
             else:
                 print("*****KAPPA3******")
                 os.remove(tempfile)
-                return directory
-
+                return json.dumps(data)
             print("****KAPPA4****")
-            return directory
-
+            return json.dumps(data)
         else:
             return 'TTS Engine Failed'
-
-    # def process():
-    # 	file=synthesize("I want to be the very best")
-    # 	return render_template('index.html',audio_src=file)
 
     cli = sys.modules['flask.cli']
     cli.show_server_banner = lambda *x: None
