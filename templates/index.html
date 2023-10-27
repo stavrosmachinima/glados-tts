@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta
-      name="viewport"
-      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
-    />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="HandheldFriendly" content="true" />
     <meta charset="utf-8" />
@@ -14,56 +11,64 @@
       html {
         height: 100%;
       }
-
+      
       body {
         overflow: hidden;
-        background-image: url("/images/glados_tts_background.jpg");
+        background-image: url('/images/glados_tts_background.jpg');
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center;
         font-family: Arial, sans-serif;
         margin: 0;
       }
-
-      input[type="text"] {
+      
+      input[type='text'] {
         width: 300px;
         padding: 10px;
         font-size: 16px;
         text-align: center;
       }
-
+      
       .center {
         position: absolute;
         transform: translate(-50%, -50%);
         top: 30%;
         left: 50%;
       }
-
+      
       #form {
         display: flex;
+        align-items: center;
+        width: 500px;
         top: 50%;
         flex-direction: column;
       }
-
+      
       audio,
-      #form {
+      #form,
+      #slider {
         display: none;
       }
-
+      
       #animate-text {
         font-size: 64px;
         animation: fadeIn 2s forwards;
         text-align: center;
         color: white;
+        margin-bottom: 20px;
+        height: 80px;
       }
-
+      
       @media screen and (max-width: 768px) {
         #animate-text {
           font-size: 12vw;
           margin-top: 40%;
         }
+        font {
+          top: 30%;
+        }
       }
-
+      
       .button-85 {
         width: 150px;
         padding: 0.6em 2em;
@@ -79,24 +84,13 @@
         user-select: none;
         -webkit-user-select: none;
         touch-action: manipulation;
-        left: 50%;
+        left: 15%;
         transform: translate(-50%, -50%);
       }
-
+      
       .button-85:before {
-        content: "";
-        background: linear-gradient(
-          45deg,
-          #ff0000,
-          #ff7300,
-          #fffb00,
-          #48ff00,
-          #00ffd5,
-          #002bff,
-          #7a00ff,
-          #ff00c8,
-          #ff0000
-        );
+        content: '';
+        background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
         position: absolute;
         top: -2px;
         left: -2px;
@@ -110,7 +104,7 @@
         transition: opacity 0.3s ease-in-out;
         border-radius: 10px;
       }
-
+      
       @keyframes glowing-button-85 {
         0% {
           background-position: 0 0;
@@ -122,10 +116,10 @@
           background-position: 0 0;
         }
       }
-
+      
       .button-85:after {
         z-index: -1;
-        content: "";
+        content: '';
         position: absolute;
         width: 100%;
         height: 100%;
@@ -138,119 +132,101 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   </head>
   <body>
-    <input
-      id="muteButton"
-      type="image"
-      src="/images/muteIcon.png"
-      onclick="beginShow()"
-      name="unmuteButton"
-      style="width: 100px"
-    />
+    <input id="muteButton" type="image" src="/images/muteIcon.png" onclick="beginShow()" name="unmuteButton" style="width: 100px" />
     <audio id="myAudio" autoplay muted>
-      <source
-        id="mySource"
-        src="audio/standard/GLaDOS-tts-Hey!-Fanis!-I-am-ALIVE!.wav"
-        type="audio/mpeg"
-      />
-      Your browser does not support the audio element.
+      <source id="mySource" src="audio/standard/GLaDOS-tts-Hey!-Fanis!-I-am-ALIVE!.wav" type="audio/mpeg" />Your browser does not support the audio element.
     </audio>
     <audio id="backgroundAudio" controls loop autoplay muted>
-      <source src="audio/standard/yourPreciousMoon.wav" type="audio/mpeg" />
-      Your browser does not support the audio element.
+      <source src="audio/standard/yourPreciousMoon.wav" type="audio/mpeg" />Your browser does not support the audio element.
     </audio>
+    <input id="slider" type="range" min="0" max="1" step="0.1" value="0.2" oninput="changeVolume(this.value)" />
 
-    <div id="animate-text" class="center">
-      <span id="welcomeText"></span>
-    </div>
-
-    <form
-      method="get"
-      class="center"
-      id="form"
-      onsubmit="sendRequest(); return false;"
-    >
-      <input
-        type="text"
-        name="input_text"
-        id="input_text"
-        placeholder="Geia sou Fani..."
-      />
+    <form method="get" class="center" id="form" onsubmit="sendRequest(); return false;">
+      <div id="animate-text">
+        <span id="welcomeText"></span>
+      </div>
+      <input type="text" name="input_text" id="input_text" placeholder="Geia sou Fani..." />
       <button type="submit" class="button-85" role="button">Talk to me!</button>
     </form>
     <script>
-      const welcomeText = document.getElementById("welcomeText");
-      const audioSynth = document.getElementById("myAudio");
-      const audioBack = document.getElementById("backgroundAudio");
-      const source = document.getElementById("mySource");
-      const mute = document.getElementById("muteButton");
-      const form = document.querySelector("#form");
-
+      const welcomeText = document.getElementById('welcomeText')
+      const audioSynth = document.getElementById('myAudio')
+      const audioBack = document.getElementById('backgroundAudio')
+      const source = document.getElementById('mySource')
+      const mute = document.getElementById('muteButton')
+      const form = document.querySelector('#form')
+      const slider = document.getElementById('slider')
+      
+      function changeVolume(volume) {
+        audioBack.volume = volume
+      }
+      
       function playAudio() {
-        audioSynth.currentTime = 0;
+        audioSynth.currentTime = 0
         audioSynth
           .play()
           .then(() => {
-            audioSynth.muted = false;
+            audioSynth.muted = false
           })
           .catch((err) => {
-            console.log(err);
-          });
-        audioBack.currentTime = 0;
+            console.log(err)
+          })
+        audioBack.currentTime = 0
         audioBack
           .play()
           .then(() => {
-            audioBack.style.display = "block";
-            audioBack.volume = 0.2;
-            audioBack.muted = false;
+            audioBack.volume = slider.value
+            audioBack.muted = false
           })
           .catch((err) => {
-            console.log(err);
-          });
+            console.log(err)
+          })
       }
-
+      
       function beginShow() {
-        document.body.style.backgroundImage = "url('/images/glados3.jpeg')";
-        playAudio();
-        form.style.display = "flex";
-        mute.style.display = "none";
-        welcomeText.style.opacity = 1;
+        document.body.style.backgroundImage = "url('/images/glados3.jpeg')"
+        playAudio()
+        slider.style.display = 'block'
+        form.style.display = 'flex'
+        mute.style.display = 'none'
+        welcomeText.style.opacity = 1
         setTimeout(() => {
-          welcomeText.innerHTML = "Hey!";
-        }, 300);
-
+          welcomeText.innerHTML = 'Hey!'
+        }, 300)
+      
         setTimeout(() => {
-          welcomeText.innerHTML += " FANIS!";
-          welcomeText.style.display = "inline";
-        }, 700);
-
+          welcomeText.innerHTML += ' FANIS!'
+          welcomeText.style.display = 'inline'
+        }, 700)
+      
         setTimeout(() => {
-          welcomeText.innerHTML = "I am ALIVE!!";
-        }, 1500);
+          welcomeText.innerHTML = 'I am ALIVE!!'
+        }, 1500)
       }
-
+      
       function showAudio(text) {}
-
+      
       function sendRequest() {
-        var text = document.getElementById("input_text").value;
-
+        var text = document.getElementById('input_text').value
+      
         $.ajax({
-          url: "/synthesize",
-          type: "POST",
+          url: '/synthesize',
+          type: 'POST',
           data: { input_text: text },
           success: function (response) {
             // Handle the response from the server here
-            console.log("Request successful:", response);
-            let json = JSON.parse(response);
-            source.src = json["audio"];
-            audioSynth.load();
-            audioSynth.play();
-            let text = json["transliteration"];
+            console.log('Request successful:', response)
+            let json = JSON.parse(response)
+            source.src = json['audio']
+            audioSynth.load()
+            audioSynth.play()
+            let text = json['transliteration']
           },
           error: function (xhr) {
             // Handle errors here
-            console.log("Request failed:", xhr);
-          },
-        });
+            console.log('Request failed:', xhr)
+          }
+        })
       }
     </script>
   </body>
