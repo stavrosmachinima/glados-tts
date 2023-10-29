@@ -13,6 +13,8 @@ print("\033[1;94mINFO:\033[;97m Initializing TTS Engine...")
 
 glados = tts_runner(False, True)
 
+tempFolder = 'static/audio/temp/'
+
 
 def has_followup(url):
     passed_url = urllib.parse.urlparse(url)
@@ -22,9 +24,9 @@ def has_followup(url):
 def glados_tts(text, key=False, alpha=1.0):
 
     if (key):
-        output_file = ('static/audio/GLaDOS-tts-temp-output-'+key+'.wav')
+        output_file = (tempFolder+'GLaDOS-tts-temp-output-'+key+'.wav')
     else:
-        output_file = ('static/audio/GLaDOS-tts-temp-output.wav')
+        output_file = (tempFolder+'GLaDOS-tts-temp-output.wav')
 
     glados.run_tts(text, alpha).export(output_file, format="wav")
     return True
@@ -46,7 +48,6 @@ if __name__ == "__main__":
 
     @app.route('/')
     def home():
-        file = "audio/GLaDOS-tts-Hey!-Fanis!-I-am-ALIVE!.wav"
         return render_template('index.html')
 
     @app.route('/synthesize', methods=['POST', 'GET'])
@@ -55,16 +56,18 @@ if __name__ == "__main__":
     def synthesize():
         # if(text == ''): return 'No input'
 
+        # TODO: The below text is what is coming from the form.abs
+        # Use it wisely son
         print(request.form.get('input_text'))
-        text = "I solemnly swear that I am up to no good!"
+        text = "One time a day, makes the doctor go away"
         # text = urllib.parse.unquote(request.url[request.url.find('synthesize/')+11:])
         filename = "GLaDOS-tts-"+text.replace(" ", "-")
-        # filename = filename.replace("!", "")
-        filename = filename.replace("°c", "degrees celcius")
+        filename = filename.replace("!", "")
+        # filename = filename.replace("°c", "degrees celcius")
         filename = filename.replace(",", "")+".wav"
-        directory = 'audio/synthesized/'+filename
-        filepath = './static/'+directory
-        data={'audio':directory,'transliteration':text}
+        filepath = 'audio/synthesized/'+filename
+        data = {'audio': filepath, 'transliteration': text}
+        filepath = './static/'+filepath
 
         # Check for Local Cache
         if (os.path.isfile(filepath)):
@@ -79,7 +82,7 @@ if __name__ == "__main__":
         key = str(time.time())[7:]
         if (glados_tts(text, key)):
             print("*******AKKPPA2*******")
-            tempfile = './static/synthesized/dynamic/GLaDOS-tts-temp-output-'+key+'.wav'
+            tempfile = tempFolder+'GLaDOS-tts-temp-output-'+key+'.wav'
 
             # If the text isn't too long, store in cache
             if (len(text) < 200 and CACHE):

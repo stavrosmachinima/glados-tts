@@ -56,13 +56,11 @@
         text-align: center;
         color: white;
         margin-bottom: 20px;
-        height: 80px;
       }
       
       @media screen and (max-width: 768px) {
         #animate-text {
           font-size: 12vw;
-          margin-top: 40%;
         }
         font {
           top: 30%;
@@ -204,7 +202,15 @@
         }, 1500)
       }
       
-      function showAudio(text) {}
+      function showAudio(text) {
+        welcomeText.innerHTML = ''
+        welcomeText.style.fontSize = '32px'
+        for (let i=0; i<text.length ; i++) {
+          setTimeout(() => {
+            welcomeText.innerHTML += text[i]
+          }, 100*i)
+        }
+      }
       
       function sendRequest() {
         var text = document.getElementById('input_text').value
@@ -221,6 +227,7 @@
             audioSynth.load()
             audioSynth.play()
             let text = json['transliteration']
+            showAudio(text)
           },
           error: function (xhr) {
             // Handle errors here
