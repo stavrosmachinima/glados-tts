@@ -59,12 +59,12 @@ if __name__ == "__main__":
         # TODO: The below text is what is coming from the form.abs
         # Use it wisely son
         print(request.form.get('input_text'))
-        text = "One time a day, makes the doctor go away"
+        text = "Freedom or death. There is only one in life. You can't have both."
         # text = urllib.parse.unquote(request.url[request.url.find('synthesize/')+11:])
-        filename = "GLaDOS-tts-"+text.replace(" ", "-")
-        filename = filename.replace("!", "")
+        filename = "GLaDOS-tts-" + \
+            text.replace(" ", "-").replace("?", "").replace("!",
+                                                            "").replace(",", "")+".wav"
         # filename = filename.replace("°c", "degrees celcius")
-        filename = filename.replace(",", "")+".wav"
         filepath = 'audio/synthesized/'+filename
         data = {'audio': filepath, 'transliteration': text}
         filepath = './static/'+filepath

@@ -27,6 +27,7 @@
         padding: 10px;
         font-size: 16px;
         text-align: center;
+        margin-bottom: 60px;
       }
       
       .center {
@@ -46,7 +47,7 @@
       
       audio,
       #form,
-      #slider {
+      #slider, #processGif {
         display: none;
       }
       
@@ -70,7 +71,6 @@
       .button-85 {
         width: 150px;
         padding: 0.6em 2em;
-        margin-top: 60px;
         border: none;
         outline: none;
         color: rgb(255, 255, 255);
@@ -144,7 +144,8 @@
         <span id="welcomeText"></span>
       </div>
       <input type="text" name="input_text" id="input_text" placeholder="Geia sou Fani..." />
-      <button type="submit" class="button-85" role="button">Talk to me!</button>
+      <button type="submit" class="button-85" id="submitButton" role="button">Talk to me!</button>
+      <img id="processGif" src="/images/processing.gif" style="width: 100px" alt="Processing.." />
     </form>
     <script>
       const welcomeText = document.getElementById('welcomeText')
@@ -154,8 +155,10 @@
       const mute = document.getElementById('muteButton')
       const form = document.querySelector('#form')
       const slider = document.getElementById('slider')
+      const submitButton=document.getElementById('submitButton')
+      const processing=document.getElementById('processGif')
       
-      function changeVolume(volume) {
+      function changeVolume(volume) { 
         audioBack.volume = volume
       }
       
@@ -214,6 +217,8 @@
       
       function sendRequest() {
         var text = document.getElementById('input_text').value
+        submitButton.style.display = 'none'
+        processing.style.display = 'block'
       
         $.ajax({
           url: '/synthesize',
@@ -228,6 +233,8 @@
             audioSynth.play()
             let text = json['transliteration']
             showAudio(text)
+            submitButton.style.display = 'block'
+            processing.style.display = 'none'
           },
           error: function (xhr) {
             // Handle errors here
