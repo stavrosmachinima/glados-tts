@@ -147,6 +147,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   </head>
   <body>
+    <input id="slider" type="range" min="0" max="1" step="0.1" value="0.2" oninput="changeVolume(this.value)" />
     <h1>Something...or Someone is waiting for you...</h1>
     <input id="portal" class="center" type="image" src="/images/portal.gif" onclick="beginShow()" name="portal" title="Get Inside!"/>
     <audio id="myAudio" autoplay muted>
@@ -155,13 +156,12 @@
     <audio id="backgroundAudio" controls loop autoplay muted>
       <source src="audio/standard/yourPreciousMoon.wav" type="audio/mpeg" />Your browser does not support the audio element.
     </audio>
-    <input id="slider" type="range" min="0" max="1" step="0.1" value="0.2" oninput="changeVolume(this.value)" />
 
     <form method="get" class="center" id="form" onsubmit="sendRequest(); return false;">
       <div id="animate-text">
         <span id="welcomeText"></span>
       </div>
-      <input type="text" name="input_text" id="input_text" placeholder="Geia sou Fani..." />
+      <input type="text" name="input_text" id="input_text" placeholder="Geia sou Fani..." autocomplete="off"/>
       <button type="submit" class="button-85" id="submitButton" role="button">Talk to me!</button>
       <img id="processGif" src="/images/processing.gif" style="width: 100px" alt="Processing.." />
     </form>
@@ -194,8 +194,8 @@
         audioBack
           .play()
           .then(() => {
-            audioBack.volume = slider.value
             audioBack.muted = false
+            audioBack.volume = slider.value
           })
           .catch((err) => {
             console.log(err)
@@ -205,6 +205,7 @@
       function beginShow() {
         document.body.style.backgroundImage = "url('/images/glados.jpeg')"
         playAudio()
+        $("h1").hide();
         slider.style.display = 'block'
         form.style.display = 'flex'
         portal.style.display = 'none'
