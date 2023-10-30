@@ -58,6 +58,12 @@
         color: white;
         margin-bottom: 20px;
       }
+
+      #portal{
+        width: 215px;
+        top:52%;
+        left:50.2%;
+      }
       
       @media screen and (max-width: 768px) {
         #animate-text {
@@ -65,6 +71,11 @@
         }
         font {
           top: 30%;
+        }
+
+        #portal{
+          width: 180px;
+          top: 51.5%;
         }
       }
       
@@ -126,11 +137,14 @@
         top: 0;
         border-radius: 10px;
       }
+
+
+
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   </head>
   <body>
-    <input id="muteButton" type="image" src="/images/muteIcon.png" onclick="beginShow()" name="unmuteButton" style="width: 100px" />
+    <input id="portal" class="center" type="image" src="/images/portal.gif" onclick="beginShow()" name="portal" title="Get Inside!"/>
     <audio id="myAudio" autoplay muted>
       <source id="mySource" src="audio/standard/GLaDOS-tts-Hey!-Fanis!-I-am-ALIVE!.wav" type="audio/mpeg" />Your browser does not support the audio element.
     </audio>
@@ -152,7 +166,7 @@
       const audioSynth = document.getElementById('myAudio')
       const audioBack = document.getElementById('backgroundAudio')
       const source = document.getElementById('mySource')
-      const mute = document.getElementById('muteButton')
+      const portal = document.getElementById('portal')
       const form = document.querySelector('#form')
       const slider = document.getElementById('slider')
       const submitButton=document.getElementById('submitButton')
@@ -185,11 +199,11 @@
       }
       
       function beginShow() {
-        document.body.style.backgroundImage = "url('/images/glados3.jpeg')"
+        document.body.style.backgroundImage = "url('/images/glados.jpeg')"
         playAudio()
         slider.style.display = 'block'
         form.style.display = 'flex'
-        mute.style.display = 'none'
+        portal.style.display = 'none'
         welcomeText.style.opacity = 1
         setTimeout(() => {
           welcomeText.innerHTML = 'Hey!'
