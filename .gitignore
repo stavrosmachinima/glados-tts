@@ -1,6 +1,6 @@
 **/__pycache__/**
-*.wav
-static/audio/*
-audio/*
+static/audio/synthesized/*
+static/audio/temp/*
 models/*
 *.pt
+.env

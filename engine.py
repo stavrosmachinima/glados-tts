@@ -1,3 +1,4 @@
+import json
 from glados import tts_runner
 import urllib.parse
 import time
@@ -5,7 +6,11 @@ from scipy.io.wavfile import write
 from utils.tools import prepare_text
 import sys
 import os
-import json
+import openai
+from dotenv import load_dotenv
+load_dotenv()
+openai.organization = "org-GvNbAFZJOzIVW7POPScDaRFs"
+openai.api_key = os.getenv("OPENAI_API_KEY")
 sys.path.insert(0, os.getcwd()+'/glados_tts')
 
 
