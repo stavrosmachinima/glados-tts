@@ -152,7 +152,7 @@
   </head>
   <body>
     <input id="slider" type="range" min="0" max="1" step="0.1" value="0.2" oninput="changeVolume(this.value)" />
-    <h1>Something...or Someone is waiting for you...</h1>
+    <h1>Something... or Someone is waiting for you...</h1>
     <input id="portal" class="center" type="image" src="/images/portal.gif" onclick="beginShow()" name="portal" title="Get Inside!"/>
     <audio id="myAudio" autoplay muted>
       <source id="mySource" src="audio/standard/GLaDOS-tts-Hey!-Fanis!-I-am-ALIVE!.wav" type="audio/mpeg" />Your browser does not support the audio element.
@@ -179,6 +179,7 @@
       const slider = document.getElementById('slider')
       const submitButton=document.getElementById('submitButton')
       const processing=document.getElementById('processGif')
+      const input=document.getElementById('input_text')
       
       function changeVolume(volume) { 
         audioBack.volume = volume
@@ -239,7 +240,8 @@
       }
       
       function sendRequest() {
-        var text = document.getElementById('input_text').value
+        var text = input.value
+        input.value= ''
         submitButton.style.display = 'none'
         processing.style.display = 'block'
       
