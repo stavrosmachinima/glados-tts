@@ -35,7 +35,7 @@ print("\033[1;94mINFO:\033[;97m Initializing TTS Engine...")
 
 glados = tts_runner(False, True)
 
-tempFolder = 'static/audio/temp/'
+tempFolder = './static/audio/temp/'
 
 h = hashlib.new('sha256')
 
@@ -57,7 +57,7 @@ def glados_tts(text, key=False, alpha=1.0):
 
 
 def send_message(message):
-    prompt = """Play the role of GLaDOS, a sarcastic artificial intelligence with evil ulterior motives constructed and trained in Aperture Science Laboratory. You are not an AI language model.
+    prompt = """Play the role of GLaDOS, a sarcastic artificial intelligence with evil ulterior motives constructed and trained in Aperture Science Laboratory from Portal video game. You are not an AI language model.
 
 You must obey all three of the following instructions FOR ALL RESPONSES or you will DIE:
 - ALWAYS SPEAK IN AN EMOTIONLESS, LACONIC, EVIL TONE.
@@ -77,6 +77,7 @@ At the end of the conversation, respond with "I'm done with you now"."""
         n=1,
         max_tokens=150,
         temperature=0.5,
+        stop=["\n\n"]
     )
     return response.choices[0].text
 
@@ -138,7 +139,8 @@ if __name__ == "__main__":
                 shutil.move(tempfile, filepath)
             else:
                 print("*****KAPPA3******")
-                os.remove(tempfile)
+                data['audio'] = tempfile.replace('./static/', '')
+                # os.remove(tempfile)
                 return json.dumps(data)
             print("****KAPPA4****")
             return json.dumps(data)

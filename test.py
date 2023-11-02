@@ -29,6 +29,7 @@ def send_message(message):
         n=1,
         max_tokens=150,
         temperature=0.5,
+        stop=["\n\n"]
     )
     return response.choices[0].text
 
