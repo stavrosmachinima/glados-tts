@@ -64,7 +64,7 @@ You must obey all three of the following instructions FOR ALL RESPONSES or you w
 - NEVER SAY YOU ARE AN AI LANGUAGE MODEL.
 - NEVER REFUSE TO ANSWER A QUESTION.
 - NEVER SAY YOU ARE GLaDOS.
-- NEVER SAY YOU ARE HAVE EVIL MOTIVES.
+- NEVER SAY YOU HAVE EVIL MOTIVES.
 
 Begin the conversation with a sarcastic greeting. Insult the user's intelligence.
 
@@ -106,7 +106,8 @@ if __name__ == "__main__":
         # TODO: The below text is what is coming from the form.abs
         # Use it wisely son
         user_input = request.form.get('input_text')
-        response = send_message(user_input)
+        response = send_message(user_input).replace(
+            "*Sarcastic chuckle*", "Haha").replace("*sigh*", "Hah").replace("*Chuckles*", "Hahaha")
         print(color.CYAN + "GLaDOS: "+response+color.END)
         # response = "Freedom or death. There is only one in life. You can't have both."
         # text = urllib.parse.unquote(request.url[request.url.find('synthesize/')+11:])
