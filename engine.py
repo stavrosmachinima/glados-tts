@@ -12,37 +12,18 @@ import sys
 import os
 import openai
 from dotenv import load_dotenv
-load_dotenv()
-openai.organization = "org-GvNbAFZJOzIVW7POPScDaRFs"
-openai.api_key = os.getenv("OPENAI_API_KEY")
-sys.path.insert(0, os.getcwd()+'/glados_tts')
+import logging
 
 
-class color:
-    PURPLE = '\033[95m'
-    CYAN = '\033[96m'
-    DARKCYAN = '\033[36m'
-    BLUE = '\033[94m'
-    GREEN = '\033[92m'
-    YELLOW = '\033[93m'
-    RED = '\033[91m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-    END = '\033[0m'
-
-
-print("\033[1;94mINFO:\033[;97m Initializing TTS Engine...")
-
-glados = tts_runner(False, True)
-
-tempFolder = './static/audio/temp/'
-
-h = hashlib.new('sha256')
-
-
-def has_followup(url):
-    passed_url = urllib.parse.urlparse(url)
-    return bool(passed_url.path)
+def setupLogger():
+    logger = logging.getLogger("tts_engine")
+    logger.setLevel(logging.INFO)
+    file_handler = logging.FileHandler("./logs/tts_engine.log")
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+    return logger
 
 
 def glados_tts(text, key=False, alpha=1.0):
@@ -82,6 +63,22 @@ At the end of the conversation, respond with "I'm done with you now"."""
     return response.choices[0].text
 
 
+load_dotenv()
+openai.organization = "org-GvNbAFZJOzIVW7POPScDaRFs"
+openai.api_key = os.getenv("OPENAI_API_KEY")
+sys.path.insert(0, os.getcwd()+'/glados_tts')
+
+logger = setupLogger()
+print("\033[1;94mINFO:\033[;97m Initializing TTS Engine...")
+logger.info("Initializing TTS Engine...")
+
+glados = tts_runner(False, True)
+
+tempFolder = './static/audio/temp/'
+
+h = hashlib.new('sha256')
+
+
 # If the script is run directly, assume remote engine
 if __name__ == "__main__":
 
@@ -90,6 +87,7 @@ if __name__ == "__main__":
     CACHE = True
 
     print("\033[1;94mINFO:\033[;97m Initializing TTS Server...")
+    logger.info("Initializing TTS Server...")
 
     app = Flask(__name__, static_url_path='/', static_folder='static')
 
@@ -98,52 +96,41 @@ if __name__ == "__main__":
         return render_template('index.html')
 
     @app.route('/synthesize', methods=['POST'])
-    # @app.route('/synthesize/', defaults={'text': ''})
-    # @app.route('/synthesize/<path:text>')
     def synthesize():
-        # if(text == ''): return 'No input'
-
-        # TODO: The below text is what is coming from the form.abs
-        # Use it wisely son
+        # TODO print userinput response and filename
         user_input = request.form.get('input_text')
+        logger.info("User Input: "+user_input)
         response = send_message(user_input).replace(
             "*Sarcastic chuckle*", "Haha").replace("*sigh*", "Hah").replace("*Chuckles*", "Hahaha")
-        print(color.CYAN + "GLaDOS: "+response+color.END)
-        # response = "Freedom or death. There is only one in life. You can't have both."
-        # text = urllib.parse.unquote(request.url[request.url.find('synthesize/')+11:])
+        logger.info("Response: "+response)
         h.update(response.encode())
         filename = h.hexdigest()
-        print(color.BLUE+filename+color.END)
-        # filename = filename.replace("°c", "degrees celcius")
+        logger.info("Filename: "+filename)
         filepath = 'audio/synthesized/'+filename+'.wav'
         data = {'audio': filepath, 'transliteration': response}
         filepath = './static/'+filepath
 
         # Check for Local Cache
         if (os.path.isfile(filepath)):
-            print("AKKPPA1")
             # Update access time. This will allow for routine cleanups
             os.utime(filepath, None)
             print(
                 "\033[1;94mINFO:\033[;97m The audio sample sent from cache.")
-            # return render_template('index.html', audio_src=directory, its_lit=True)
+            logger.info("The audio sample sent from cache.")
             return json.dumps(data)
 
         # Generate New Sample
         key = str(time.time())[7:]
         if (glados_tts(response, key)):
-            print("*******AKKPPA2*******")
             tempfile = tempFolder+'GLaDOS-tts-temp-output-'+key+'.wav'
 
             # If the response isn't too long, store in cache
             if (len(response) < 200 and CACHE):
                 shutil.move(tempfile, filepath)
             else:
-                print("*****KAPPA3******")
                 data['audio'] = tempfile.replace('./static/', '')
                 # os.remove(tempfile)
                 return json.dumps(data)
-            print("****KAPPA4****")
             return json.dumps(data)
         else:
             return 'TTS Engine Failed'

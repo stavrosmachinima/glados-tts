@@ -3,3 +3,4 @@ static/audio/synthesized/*
 static/audio/temp/*
 *.pt
 .env
+*.log

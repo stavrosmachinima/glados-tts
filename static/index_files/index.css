@@ -1,0 +1,156 @@
+body,
+html {
+  height: 100%;
+}
+
+body {
+  overflow: hidden;
+  background-image: url("/images/glados_tts_background.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  font-family: Arial, sans-serif;
+  margin: 0;
+}
+
+input[type="text"] {
+  width: 300px;
+  padding: 10px;
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.center {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 30%;
+  left: 50%;
+}
+
+#form {
+  display: flex;
+  align-items: center;
+  top: 50%;
+  flex-direction: column;
+}
+
+audio,
+#form,
+#slider,
+#processGif {
+  display: none;
+}
+
+#animate-text {
+  font-size: 64px;
+  animation: fadeIn 2s forwards;
+  text-align: center;
+  color: white;
+  margin-bottom: 20px;
+}
+
+#portal {
+  width: 215px;
+  top: 52%;
+  left: 50.2%;
+}
+
+@media screen and (max-width: 768px) {
+  #animate-text {
+    font-size: 12vw;
+  }
+  font {
+    top: 30%;
+  }
+
+  #portal {
+    width: 180px;
+    top: 51.5%;
+  }
+
+  h1 {
+    font-size: 4vh;
+  }
+}
+
+.button-85 {
+  width: 150px;
+  padding: 0.6em 2em;
+  border: none;
+  outline: none;
+  color: rgb(255, 255, 255);
+  background: #111;
+  cursor: pointer;
+  position: relative;
+  z-index: 0;
+  border-radius: 10px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.button-85:before {
+  content: "";
+  background: linear-gradient(
+    45deg,
+    #ff0000,
+    #ff7300,
+    #fffb00,
+    #48ff00,
+    #00ffd5,
+    #002bff,
+    #7a00ff,
+    #ff00c8,
+    #ff0000
+  );
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  background-size: 400%;
+  z-index: -1;
+  filter: blur(5px);
+  -webkit-filter: blur(5px);
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  animation: glowing-button-85 20s linear infinite;
+  transition: opacity 0.3s ease-in-out;
+  border-radius: 10px;
+}
+
+@keyframes glowing-button-85 {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 400% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.button-85:after {
+  z-index: -1;
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #222;
+  left: 0;
+  top: 0;
+  border-radius: 10px;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 20vh;
+  display: none;
+}
+
+.centerDiv {
+  width: 300px;
+  text-align: center;
+}
