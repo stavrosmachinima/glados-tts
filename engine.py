@@ -100,7 +100,6 @@ if __name__ == "__main__":
 
     @app.route('/synthesize', methods=['POST'])
     def synthesize():
-        # TODO print userinput response and filename
         user_input = request.form.get('input_text')
         logger.info("User Input: "+user_input)
         response = send_message(user_input).replace(
