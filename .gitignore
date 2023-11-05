@@ -4,3 +4,4 @@ static/audio/temp/*
 *.pt
 .env
 *.log
+testGlados.py
