@@ -38,5 +38,4 @@ below.
 1. Download the model files from [`Google Drive`](https://drive.google.com/file/d/1TRJtctjETgVVD5p7frSVPmgw8z8FFtjD/view?usp=sharing) and unzip into the repo folder
 2. Install the required Python packages, e.g., by running `pip install -r
    requirements.txt`
-3. Remember to add .env file in repo folder with the following format
-   OPENAI_API_KEY="key"
+3. Remember to add .env file in repo folder with the following format OPENAI_API_KEY=key
