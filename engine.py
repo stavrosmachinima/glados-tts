@@ -74,7 +74,10 @@ logger.info("Initializing TTS Engine...")
 
 glados = tts_runner(False, True)
 
-tempFolder = './static/audio/temp/'
+tempFolder = './static/audio/temp'
+synthesized='./static/audio/synthesized'
+os.makedirs(tempFolder)
+os.makedirs(synthesized)
 
 h = hashlib.new('sha256')
 
