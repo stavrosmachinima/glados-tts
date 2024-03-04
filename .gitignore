@@ -5,3 +5,5 @@ static/audio/temp/*
 .env
 *.log
 testGlados.py
+.vscode/*
+venv3.10/
