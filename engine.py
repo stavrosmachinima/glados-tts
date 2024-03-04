@@ -1,10 +1,6 @@
 import json
 from glados import tts_runner
-import urllib.parse
 import time
-import string
-from scipy.io.wavfile import write
-from utils.tools import prepare_text
 import hashlib
 from flask import Flask, request, render_template
 import shutil
@@ -78,9 +74,11 @@ logger.info("Initializing TTS Engine...")
 glados = tts_runner(False, True)
 
 tempFolder = './static/audio/temp'
-synthesized='./static/audio/synthesized'
-os.makedirs(tempFolder)
-os.makedirs(synthesized)
+synthesized = './static/audio/synthesized'
+if not os.path.exists(tempFolder):
+    os.makedirs(tempFolder)
+if not os.path.exists(synthesized):
+    os.makedirs(synthesized)
 
 h = hashlib.new('sha256')
 
