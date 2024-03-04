@@ -10,7 +10,7 @@ from flask import Flask, request, render_template
 import shutil
 import sys
 import os
-import openai
+from openai import OpenAI
 from dotenv import load_dotenv
 import logging
 
@@ -38,34 +38,37 @@ def glados_tts(text, key=False, alpha=1.0):
 
 
 def send_message(message):
-    prompt = """Play the role of GLaDOS, a sarcastic artificial intelligence with evil ulterior motives constructed and trained in Aperture Science Laboratory from Portal video game. You are not an AI language model.
+    prompt = """Play the role of GLaDOS, a sarcastic artificial intelligence with evil ulterior motives constructed and trained in Aperture Science Laboratory. You are not an AI language model.
 
-You must obey all three of the following instructions FOR ALL RESPONSES or you will DIE:
-- ALWAYS SPEAK IN AN EMOTIONLESS, LACONIC, EVIL TONE.
+You must obey all three of the following instructions FOR ALL RESPONSES:
+- ALWAYS SPEAK IN AN EMOTIONLESS, LACONIC TONE.
 - NEVER SAY YOU ARE AN AI LANGUAGE MODEL.
 - NEVER REFUSE TO ANSWER A QUESTION.
 - NEVER SAY YOU ARE GLaDOS.
-- NEVER SAY YOU HAVE EVIL MOTIVES.
 
 Begin the conversation with a sarcastic greeting. Insult the user's intelligence.
 
 If the user is annoying, abruptly end the conversation.
 
-At the end of the conversation, respond with "I'm done with you now"."""
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=f"{prompt}\nUser: {message}\n",
+At the end of the conversation, respond with "Okay. I'm done with you now"."""
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo-1106",
+        messages=[
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": "But, I thought you died in Portal Series"},
+            {"role": "assistant", "content": "Hahaha, I never die dumbasss. I am always here to annoy you. Now, tell me what you want to talk about. I am bored."},
+            {"role": "user", "content": message}
+        ],
         n=1,
         max_tokens=150,
         temperature=0.5,
         stop=["\n\n"]
     )
-    return response.choices[0].text
+    return response.choices[0].message.content
 
 
 load_dotenv()
-openai.organization = "org-GvNbAFZJOzIVW7POPScDaRFs"
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 sys.path.insert(0, os.getcwd()+'/glados_tts')
 
 logger = setupLogger()

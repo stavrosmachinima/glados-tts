@@ -10,7 +10,7 @@ const processing=document.getElementById('processGif')
 const input=document.getElementById('input_text')
 var beginShowCalled=false
 
-window.onload=function(){
+$(document).ready(function(){
   var h1 = $("h1");
   if (beginShowCalled)
     return;
@@ -20,7 +20,7 @@ window.onload=function(){
     return;
   h1.fadeIn(1000).delay(1000).fadeOut(1000);
 });
-}
+});
 
 function changeVolume(volume) {
   audioBack.volume = volume
