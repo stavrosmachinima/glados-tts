@@ -13,12 +13,18 @@ import logging
 
 def setupLogger():
     logger = logging.getLogger("tts_engine")
+    logDirectory = "./logs"
+    logFile = "tts_engine.log"
+    logPath = os.path.join(logDirectory, logFile)
     logger.setLevel(logging.INFO)
-    file_handler = logging.FileHandler("./logs/tts_engine.log")
+    if not os.path.exists(logDirectory):
+        os.makedirs(logDirectory)
+    file_handler = logging.FileHandler(logPath)
     formatter = logging.Formatter(
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
+
     return logger
 
 
