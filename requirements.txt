@@ -1,0 +1,10 @@
+deep-phonemizer
+scipy
+torch~=2.0.1
+unidecode
+nltk
+openai
+pydub
+python-dotenv
+flask
+inflect
