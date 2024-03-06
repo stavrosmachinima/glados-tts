@@ -13,6 +13,11 @@ body {
   margin: 0;
 }
 
+#overlay {
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
 input[type="text"] {
   width: 300px;
   padding: 10px;
@@ -38,8 +43,14 @@ input[type="text"] {
 audio,
 #form,
 #slider,
-#processGif {
+#processGif,
+#overlay {
   display: none;
+}
+
+#slider{
+  top:0;
+  position:fixed;
 }
 
 #animate-text {

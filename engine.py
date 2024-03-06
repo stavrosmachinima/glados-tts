@@ -9,6 +9,10 @@ import os
 from openai import OpenAI
 from dotenv import load_dotenv
 import logging
+from waitress import serve
+
+app = Flask(__name__, static_url_path='/', static_folder='static')
+mode = "dev"
 
 
 def setupLogger():
@@ -94,12 +98,11 @@ if __name__ == "__main__":
 
     # Remote Engine Veritables
     PORT = 8124
-    CACHE = True
 
     print("\033[1;94mINFO:\033[;97m Initializing TTS Server...")
     logger.info("Initializing TTS Server...")
 
-    app = Flask(__name__, static_url_path='/', static_folder='static')
+#    app = Flask(__name__, static_url_path='/', static_folder='static')
 
     @app.route('/')
     def home():
@@ -134,7 +137,7 @@ if __name__ == "__main__":
             tempfile = tempFolder+'GLaDOS-tts-temp-output-'+key+'.wav'
 
             # If the response isn't too long, store in cache
-            if (len(response) < 200 and CACHE):
+            if (len(response) < 200):
                 shutil.move(tempfile, filepath)
             else:
                 data['audio'] = tempfile.replace('./static/', '')
@@ -144,6 +147,8 @@ if __name__ == "__main__":
         else:
             return 'TTS Engine Failed'
 
-    cli = sys.modules['flask.cli']
-    cli.show_server_banner = lambda *x: None
-    app.run(host="0.0.0.0", port=PORT)
+    if mode == "dev":
+        app.run(host="0.0.0.0", port=PORT)
+    else:
+        serve(app, host="0.0.0.0", port=PORT,
+              threads=1, url_prefix="/glados-app")

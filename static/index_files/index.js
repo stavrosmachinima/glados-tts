@@ -8,6 +8,8 @@ const slider = document.getElementById("slider");
 const submitButton = document.getElementById("submitButton");
 const processing = document.getElementById("processGif");
 const input = document.getElementById("input_text");
+const overlay = document.getElementById("overlay");
+
 var beginShowCalled = false;
 
 $(document).ready(function () {
@@ -55,6 +57,7 @@ function beginShow() {
   form.style.display = "flex";
   portal.style.display = "none";
   welcomeText.style.opacity = 1;
+  overlay.style.display = "block";
   setTimeout(() => {
     welcomeText.innerHTML = "Hey!";
   }, 300);
