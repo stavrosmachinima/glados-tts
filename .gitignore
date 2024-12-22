@@ -6,4 +6,5 @@ static/audio/temp/*
 *.log
 testGlados.py
 .vscode/*
-venv3.*
+venv/
+.python-version
