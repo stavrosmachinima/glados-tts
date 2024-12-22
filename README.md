@@ -1,4 +1,6 @@
 # GLaDOS Text-to-speech (TTS) Voice Generator
+This project is compatible with Python versions 3.9, 3.10, 3.11, and 3.12. It has been primarily developed and tested with Python 3.10.
+
 Neural network based TTS Engine.
 
 If you want to just play around with the TTS, this works as stand-alone.
