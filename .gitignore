@@ -8,3 +8,5 @@ testGlados.py
 .vscode/*
 venv/
 .python-version
+*.wav
+*.txt
