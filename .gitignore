@@ -1,6 +1,7 @@
 **/__pycache__/**
 static/audio/synthesized/*
 static/audio/temp/*
+processed_books/
 *.pt
 .env
 *.log
@@ -8,3 +9,5 @@ testGlados.py
 .vscode/*
 venv/
 .python-version
+*.wav
+*.txt
